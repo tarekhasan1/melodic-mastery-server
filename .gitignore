@@ -1,0 +1,8 @@
+node_modules
+package-lock.json
+.vscode
+.env
+.env.local
+.env.development
+.env.production
+.vercel
