@@ -27,6 +27,32 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+     // create a collection for user
+     const userCollection = client.db("MelodicMasteryDB").collection("users");
+     // create a collection for classes
+     const classCollection = client
+         .db("MelodicMasteryDB")
+         .collection("classes");
+
+
+        app.get("/", (req, res) => {
+            res.status(200).json({ message: "welcome to server" });
+        });
+
+
+        app.use((req, res, next) => {
+            res.status(404).json({
+                message: "Not Found",
+            });
+        });
+
+        // server error handling
+        app.use((err, req, res, next) => {
+            console.log(err.stack);
+            res.status(500).send("something broke");
+        });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
