@@ -81,6 +81,7 @@ async function run() {
         email,
         role,
         selectedClasses: [],
+        enrolledClasses: [],
       });
       // console.log(newUser);
       newUser.acknowledged
