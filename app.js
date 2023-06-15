@@ -92,7 +92,7 @@ async function run() {
     app.put("/user/selected-class", async (req, res) => {
       const { email, id } = req.query;
       // update the user
-      const updatedUser = await users.updateOne(
+      const updatedUser = await userCollection.updateOne(
         { email: email },
         { $push: { selectedClasses: id } }
       );
@@ -103,7 +103,7 @@ async function run() {
       const { id, email } = req.query;
 
       // update the user
-      const updatedUser = await users.updateOne(
+      const updatedUser = await userCollection.updateOne(
         { email: email },
         { $pull: { selectedClasses: id } }
       );
