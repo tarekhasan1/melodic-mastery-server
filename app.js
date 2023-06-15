@@ -110,6 +110,30 @@ async function run() {
       );
     });
 
+    // add a class as instructor
+    app.post("/add-class", async (req, res) => {
+        const { name, email } = req.body;
+        console.log(req.body);
+        // find existing user
+        const existingClass = await classCollection.findOne({ name, email });
+
+        if (existingClass) {
+            return res.json({ error: "Class already exist" });
+        }
+
+        const newClass = await classCollection.insertOne({
+            ...req.body,
+            status: "pending",
+            enrolledStudents: 0,
+        });
+
+        // console.log(newUser);
+        newClass.acknowledged
+            ? res.status(200).json({ message: "Class successfully added" })
+            : res.status(400).json({ error: "Bad Request" });
+    }
+    )
+
     app.use((req, res, next) => {
       res.status(404).json({
         message: "Not Found",
