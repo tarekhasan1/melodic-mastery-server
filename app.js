@@ -3,6 +3,7 @@ const express = require("express");
 // const bodyParser = require('body-parser')
 const cors = require("cors");
 const { MongoClient, ServerApiVersion } = require("mongodb");
+const { ObjectId } = require("mongodb");
 
 // create express server
 const app = express();
@@ -24,7 +25,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+     client.connect();
 
     // create a collection for user
     const userCollection = client.db("MelodicMasteryDB").collection("users");
@@ -91,8 +92,7 @@ async function run() {
 
 
     // update class status
-    app.put("/update-status", (classCollection) => {
-    return async (req, res) => {
+    app.put("/update-status", async (req, res) => {
         const { id, status } = req.query;
         // Generate a new ObjectId
         const objectId = new ObjectId(id);
@@ -105,12 +105,11 @@ async function run() {
         updatedClass.acknowledged
             ? res.status(200).json({ message: "Status successfully updated" })
             : res.status(400).json({ error: "Bad Request" });
-    };
-});
+    }
+);
 
 // send class approved/denied feedback
-app.put("/send-feedback", (classCollection) => {
-    return async (req, res) => {
+app.put("/send-feedback", async (req, res) => {
         const { id } = req.query;
         // Generate a new ObjectId
         const objectId = new ObjectId(id);
@@ -124,7 +123,6 @@ app.put("/send-feedback", (classCollection) => {
         updatedClass.acknowledged
             ? res.status(200).json({ message: "Feedback successfully sent" })
             : res.status(400).json({ error: "Bad Request" });
-    };
 });
 
 
