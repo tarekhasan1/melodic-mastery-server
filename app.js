@@ -89,6 +89,22 @@ async function run() {
         : res.status(400).json({ error: "Bad Request" });
     });
 
+
+    // update user role
+    app.put("/update-role", async (req, res) => {
+        const { role, email } = req.query;
+
+        // update the user
+        const updatedUser = await userCollection.updateOne(
+            { email: email },
+            { $set: { role } }
+        );
+
+        updatedUser.acknowledged
+            ? res.status(200).json({ message: `Added as ${role}` })
+            : res.status(400).json({ error: "Bad Request" });
+    });
+
     // update selected class's seat
     app.put("/user/selected-class", async (req, res) => {
       const { email, id } = req.query;
