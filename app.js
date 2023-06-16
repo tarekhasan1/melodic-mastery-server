@@ -90,6 +90,44 @@ async function run() {
     });
 
 
+    // update class status
+    app.put("/update-status", (classCollection) => {
+    return async (req, res) => {
+        const { id, status } = req.query;
+        // Generate a new ObjectId
+        const objectId = new ObjectId(id);
+        const updatedClass = await classCollection.updateOne(
+            { _id: objectId },
+            { $set: { status } }
+        );
+        // console.log(updatedClass);
+
+        updatedClass.acknowledged
+            ? res.status(200).json({ message: "Status successfully updated" })
+            : res.status(400).json({ error: "Bad Request" });
+    };
+});
+
+// send class approved/denied feedback
+app.put("/send-feedback", (classCollection) => {
+    return async (req, res) => {
+        const { id } = req.query;
+        // Generate a new ObjectId
+        const objectId = new ObjectId(id);
+        const updatedClass = await classCollection.updateOne(
+            { _id: objectId },
+            { $set: { feedback: req.body.message } },
+            { upsert: true }
+        );
+        // console.log(updatedClass);
+
+        updatedClass.acknowledged
+            ? res.status(200).json({ message: "Feedback successfully sent" })
+            : res.status(400).json({ error: "Bad Request" });
+    };
+});
+
+
     // update user role
     app.put("/update-role", async (req, res) => {
         const { role, email } = req.query;
